@@ -13,10 +13,10 @@ The bulletin states which of the numbers will be processed in a specific month.
 
 For example Alice applies in the DV lottery for fiscal year 2015.
 She is lucky enough to be selected and her number is 13000. The DOS starts interviewing candidates
-for the DV lottery 205 in October 2014. DOS releases the visa bulletin for the month of 
+for the DV lottery 2015 in October 2014. DOS releases the visa bulletin for the month of 
 October 2014 and it says that DOS will process candidates with numbers from 1 to 8000. 
 In this case Alice has to wait for the visa bulletin of November and hope that in that month 
-DOS will be able to process his number. If DOS will never call her number by the time September
+DOS will be able to process her number. If DOS will never call her number by the time September
 2015 arrives, Alice loses her possibility to get a green card.
 
 Candidates like Alice typically have no clues when their numbers will be processed, or if they'll be
