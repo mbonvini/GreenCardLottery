@@ -48,9 +48,11 @@ SOFTWARE.
 import urllib2
 import re
 import unicodedata
+from datetime import datetime
 from bs4 import BeautifulSoup, Tag
 import pandas as pd
 import numpy as np
+import json
 
 # Months and year ranges. Because the bulletins refer to fiscal year (FY), the first month is October.
 years = range(2003,2016)
@@ -165,4 +167,46 @@ for fy in years:
 				df_south_america[fy][m] = g_south_america.groups()[1] if g_south_america.groups()[1] not in ['c','current'] else current_number
 			else:
 				print "Missing South America..."
-				
+
+def convert_month_to_date(d):
+        """
+        This function converts a string representing a month like ``october``
+        and converts it into a format like ``2015-10-01``.
+        """
+        if d in ["october", "november", "december"]:
+                return datetime.strptime(d+"-2014", "%B-%Y").strftime("%Y-%m-%d")
+        else:
+                return datetime.strptime(d+"-2015", "%B-%Y").strftime("%Y-%m-%d")
+
+# Export all the data in the data frames to JSON
+data_frames = [df_europe, df_africa, df_asia, df_oceania, df_north_america, df_south_america]
+data_names = ["europe", "africa", "asia", "oceania", "north_america", "south_america"]
+
+mean_df = pd.DataFrame()
+std_df = pd.DataFrame()
+min_df = pd.DataFrame()
+max_df = pd.DataFrame()
+for name, df in zip(data_names, data_frames):
+        
+        # Generate statistics for every DataFrame
+        mean_df[name] = df.mean(axis = 1)
+        std_df[name] = df.std(axis = 1)
+        min_df[name] = df.min(axis = 1)
+        max_df[name] = df.max(axis = 1)
+
+data = []
+for mo in months:
+        data_point = {"date": convert_month_to_date(mo)}
+        for c in data_names:
+                data_point["avg_"+c] = mean_df[c][mo]
+                data_point["u_"+c] = mean_df[c][mo] + std_df[c][mo]
+                data_point["l_"+c] = mean_df[c][mo] - std_df[c][mo]
+                data_point["min_"+c] = min_df[c][mo]
+                data_point["max_"+c] = max_df[c][mo]
+        data.append(data_point)
+
+# Save the data in a JSON file
+with open("dv_lottery.json", "w") as fp:
+        json.dump(data, fp, indent = 2)
+        
+                        
